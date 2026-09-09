@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>可信整理 · 备考资料 Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-atmosphere" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">可信整理</span>
+      <span class="brand-sub">备考资料 Demo</span>
+    </div>
+    <nav class="nav" role="tablist" aria-label="交付物导航">
+      <button type="button" class="nav-btn is-active" data-view="demo" role="tab" aria-selected="true">演示</button>
+      <button type="button" class="nav-btn" data-view="positioning" role="tab" aria-selected="false">定位</button>
+      <button type="button" class="nav-btn" data-view="flow" role="tab" aria-selected="false">流程</button>
+      <button type="button" class="nav-btn" data-view="eval" role="tab" aria-selected="false">评测</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ========== 演示 ========== -->
+    <section id="view-demo" class="view is-active" aria-label="产品演示">
+      <aside class="rail" aria-label="八环进度">
+        <h2 class="rail-title">处理进度</h2>
+        <ol class="steps" id="step-list"></ol>
+        <p class="rail-note">假数据演示 · 无后端 · 无真实模型</p>
+      </aside>
+
+      <div class="stage">
+        <div class="stage-head">
+          <p class="stage-kicker" id="stage-kicker">环 1 · 混合</p>
+          <h1 class="stage-title" id="stage-title">资料上传</h1>
+          <p class="stage-desc" id="stage-desc">选择两份假资料开始。原件始终保留，可回看。</p>
+        </div>
+
+        <div id="panel-root" class="panel-root"></div>
+
+        <div class="stage-actions" id="stage-actions"></div>
+
+        <p class="stage-footnote">
+          宁缺毋滥：来源不明条目默认不进入可用集。闸门上可点「仍要放行（不推荐）」查看反例，非必走。
+        </p>
+      </div>
+    </section>
+
+    <!-- ========== 定位 ========== -->
+    <section id="view-positioning" class="view doc-view" aria-label="产品定位说明" hidden>
+      <article class="doc">
+        <header class="doc-header">
+          <p class="doc-kicker">交付物 1</p>
+          <h1>产品定位说明（定稿）</h1>
+        </header>
+
+        <section class="doc-block">
+          <h2>一句话</h2>
+          <p>给考研、考公等备考学生用的「可信整理」工具——把散落资料变成<strong>宁缺毋滥、可回溯原文</strong>的复习材料。</p>
+        </section>
+
+        <section class="doc-block">
+          <h2>问题</h2>
+          <p>备考资料长期堆在相册、聊天、网盘里，考前翻找耗时长、易遗漏。学生不会主动打标签，期望自动整理；网盘和笔记只解决存储与手工整理。真正决定用不用的是信任：来源不清不敢采信；一旦和课件/笔记对不上，整套弃用。一次明显错误会清空信任。因此：<strong>效率是前提，准确与可信是核心。</strong></p>
+        </section>
+
+        <section class="doc-block">
+          <h2>用户</h2>
+          <p>考研、考公等长期备考、资料量大、付费意愿高的学生（不覆盖一般随堂学生作为首发）。</p>
+        </section>
+
+        <section class="doc-block">
+          <h2>机制</h2>
+          <p>AI 自动整理 + 关键节点人工确认 + 来源/可信度标注。原则是<strong>宁缺毋滥</strong>：不确定、对不上原文的内容不进入「可用复习材料」，改为待确认或交给学生手动接管。手动接管过程沉淀为后续提升整理能力的数据，而不是先追求全自动高召回。目标：单次整理约 2 小时 → 约 20 分钟；学生敢采信的结果比例 ≥60%。</p>
+        </section>
+
+        <section class="doc-block">
+          <h2>成立与否</h2>
+          <ol class="doc-list">
+            <li><strong>痛点：</strong>该类学生中 ≥60% 考前整理超过 2 小时，且 ≥40% 曾因遗漏影响复习。</li>
+            <li><strong>缺口：</strong>现有「AI 整理」使用率 &lt;20%，弃用率 &gt;50%。</li>
+            <li><strong>解法：</strong>上线不以「全量准确率 90%」为门槛，而以「进入复习材料的条目可回溯、高置信才放出」为门槛；经确认后采信率 ≥60% 则解法成立。不成立则继续收窄自动范围，而不是放开二创。</li>
+          </ol>
+        </section>
+      </article>
+    </section>
+
+    <!-- ========== 流程 ========== -->
+    <section id="view-flow" class="view doc-view" aria-label="处理流程方案" hidden>
+      <article class="doc">
+        <header class="doc-header">
+          <p class="doc-kicker">交付物 2</p>
+          <h1>处理流程方案（定稿）</h1>
+          <p class="doc-lead">人机分工规则：低代价 → 全自动；高代价且仍在草稿 → 混合（建议 + 确认后放行）；高代价且定性 / 进入可用 / 导出 → 必须确认。假阳性高代价，假阴性低代价。</p>
+        </header>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>环节</th>
+                <th>人机</th>
+                <th>理由</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. 资料上传（含聊天导入）</td>
+                <td><span class="tag tag-mix">混合</span></td>
+                <td>选什么文件只能由学生做；入库、保留原件、记来源是低代价可重传，系统全自动。</td>
+              </tr>
+              <tr>
+                <td>2. 多模态解析</td>
+                <td><span class="tag tag-auto">全自动</span></td>
+                <td>原件仍在，解错可重跑；漏字是假阴性、尚未进入可用集，代价低。</td>
+              </tr>
+              <tr>
+                <td>3. 去重与初分类</td>
+                <td><span class="tag tag-auto">全自动</span></td>
+                <td>只建重复关系、不删原件，分错科可改，仍停在草稿，代价低。</td>
+              </tr>
+              <tr>
+                <td>4. 知识点提取与结构化</td>
+                <td><span class="tag tag-auto">全自动</span></td>
+                <td>漏考点可接受；抽错仍是未放行草稿，且每条只保留候选出处，代价低。</td>
+              </tr>
+              <tr>
+                <td>5. 来源可信度标注 + 原文绑定</td>
+                <td><span class="tag tag-mix">混合</span></td>
+                <td>标「真题 / 来源不明」和绑错原文属于高代价，但还在草稿、可改标，故系统建议、学生确认后才放行。</td>
+              </tr>
+              <tr>
+                <td>6. 确认闸门</td>
+                <td><span class="tag tag-must">必须确认</span></td>
+                <td>这一步决定能否进入「可用复习材料」，信任上不可逆；允许一键全过，不允许系统悄悄放行。</td>
+              </tr>
+              <tr>
+                <td>7. 复习材料生成</td>
+                <td><span class="tag tag-auto">全自动</span></td>
+                <td>只改写已放行条目、禁止无出处新增，可按同一原料重生成，不在此步做信任判断。</td>
+              </tr>
+              <tr>
+                <td>8. 学生微调与导出</td>
+                <td><span class="tag tag-must">必须确认</span></td>
+                <td>导出=对外承诺这套能用，不可逆且假阳性代价极高；微调可做，未确认不得导出。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- ========== 评测 ========== -->
+    <section id="view-eval" class="view doc-view" aria-label="评测方案" hidden>
+      <article class="doc">
+        <header class="doc-header">
+          <p class="doc-kicker">交付物 4</p>
+          <h1>评测方案（定稿）</h1>
+          <p class="doc-lead">整理与二创分列检验。完整率降为观测，不设下限。留存与 NPS 不参与投入使用决策。</p>
+        </header>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>检验对象</th>
+                <th>层</th>
+                <th>指标</th>
+                <th>口径</th>
+                <th>采集</th>
+                <th>投入使用门槛</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>整理结果</td>
+                <td>离线</td>
+                <td>来源绑定准确率</td>
+                <td>抽查条目中，出处能指回正确原片段的比例</td>
+                <td>人工核对，每期 ≥50 条</td>
+                <td>≥90%</td>
+              </tr>
+              <tr>
+                <td>二创产出</td>
+                <td>离线</td>
+                <td>幻觉率</td>
+                <td>复习材料中「原文无依据」的条数 / 总条数</td>
+                <td>人工逐条核对，每期 ≥30 份材料</td>
+                <td>≤5%</td>
+              </tr>
+              <tr>
+                <td>整理+二创</td>
+                <td>离线</td>
+                <td>拦截遵从率</td>
+                <td>低置信 / 来源不明条目未进入导出材料的比例</td>
+                <td>抽样对账</td>
+                <td>=100%（宁缺毋滥红线）</td>
+              </tr>
+              <tr>
+                <td>敢用</td>
+                <td>在线</td>
+                <td>采信率</td>
+                <td>确认闸门中学生放行条数 / 系统提交条数</td>
+                <td>埋点</td>
+                <td>≥60%</td>
+              </tr>
+              <tr>
+                <td>敢用</td>
+                <td>在线</td>
+                <td>弃用率</td>
+                <td>完成整理但 7 日内未导出且未再打开的会话比例</td>
+                <td>埋点</td>
+                <td>≤30%</td>
+              </tr>
+              <tr>
+                <td>效率前提</td>
+                <td>在线</td>
+                <td>上传到导出时长</td>
+                <td>中位数</td>
+                <td>埋点</td>
+                <td>中位 ≤20 分钟</td>
+              </tr>
+              <tr>
+                <td>价值（不上线闸门）</td>
+                <td>业务</td>
+                <td>导出后 7 日打开率</td>
+                <td>导出材料被再次打开的比例</td>
+                <td>产品数据</td>
+                <td>只观测，建议 ≥40%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <section class="doc-block">
+          <h2>投入使用条件</h2>
+          <p>给学生用并打开二创导出，须<strong>同时满足</strong>：来源绑定 ≥90%，幻觉率 ≤5%，拦截遵从率 100%，采信率 ≥60%，弃用率 ≤30%。时长不达标只说明效率未达定位，可先小范围试用。留存与 NPS 不参与这次决策。</p>
+        </section>
+
+        <section class="doc-block">
+          <h2>附录 · 降为观测的原指标</h2>
+          <p>分类准确率、去重准确率、知识点提取完整率、修改率、二次编辑深度、次日/7 日留存、NPS——进入监测附录，避免指挥模型刷完整率。</p>
+        </section>
+      </article>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
