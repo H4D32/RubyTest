@@ -4,7 +4,13 @@
 
 ## 最快试用（不需要 npm）
 
-用浏览器打开仓库根目录的 **`OPEN-ME.html`**（双击即可）。定位、流程、演示、评测、协作都在这一页里。
+1. 从 GitHub 下载 `OPEN-ME.html`：  
+   https://github.com/H4D32/RubyTest/raw/cursor/study-materials-product-78c3/OPEN-ME.html  
+   下载后用浏览器双击打开。
+2. 或在线预览（无需下载）：  
+   https://htmlpreview.github.io/?https://github.com/H4D32/RubyTest/blob/cursor/study-materials-product-78c3/OPEN-ME.html
+
+定位、流程、演示、评测、协作都在这一页里。
 
 ## 用 Vite 开发版运行（需要 Node.js / npm）
 
