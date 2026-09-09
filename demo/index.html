@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的AI小岛 · Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <h1>我的AI小岛</h1>
+          <p class="brand-sub">Demo · 一致性闭环 + 连续编辑</p>
+        </div>
+      </div>
+      <div class="resources" id="resources">
+        <div class="chip" title="金币"><span class="chip-ico gold"></span><span id="goldVal">120</span></div>
+        <button class="chip clickable" id="btnBottle" type="button" title="打开魔力瓶">
+          <span class="chip-ico bottle"></span><span id="bottleVal">2</span>
+        </button>
+        <div class="chip mats">
+          <span>贝壳 <b id="shellVal">5</b></span>
+          <span>木头 <b id="woodVal">3</b></span>
+          <span>矿石 <b id="oreVal">2</b></span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <label class="toggle">
+          <input type="checkbox" id="annoToggle" checked />
+          <span>演示标注</span>
+        </label>
+        <button class="btn primary" id="btnCraft" type="button">AI制作</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <!-- Island scene -->
+      <section class="scene island" id="sceneIsland" aria-label="小岛主界面">
+        <div class="sky"></div>
+        <div class="sea">
+          <div class="wave w1"></div>
+          <div class="wave w2"></div>
+        </div>
+        <div class="sand"></div>
+        <div class="hut" aria-hidden="true">
+          <div class="hut-roof"></div>
+          <div class="hut-body"></div>
+          <div class="hut-door"></div>
+        </div>
+        <div class="palm" aria-hidden="true"></div>
+        <button class="npc" id="npcIsland" type="button" aria-label="小海">
+          <span class="npc-bang" id="npcBang">!</span>
+          <span class="npc-body"></span>
+          <span class="npc-name">小海</span>
+        </button>
+        <div class="player-token" id="playerIsland" aria-hidden="true"></div>
+        <div class="island-hint" id="islandHint">小海似乎有事找你…</div>
+      </section>
+
+      <!-- Room scene -->
+      <section class="scene room hidden" id="sceneRoom" aria-label="小海的房间">
+        <div class="room-wall"></div>
+        <div class="room-floor"></div>
+        <div class="room-bed" aria-hidden="true"></div>
+        <div class="place-slot ceiling" data-slot="ceiling" title="天花板挂点">天花板</div>
+        <div class="place-slot wall" data-slot="wall" title="靠墙挂点">靠墙</div>
+        <div class="place-slot floor" data-slot="floor" title="中央地面">地面</div>
+        <div id="placedItems"></div>
+        <button class="npc room-npc hidden" id="npcRoom" type="button">
+          <span class="npc-body happy"></span>
+          <span class="npc-name">小海</span>
+        </button>
+        <div class="room-toolbar">
+          <button class="btn ghost" id="btnBackIsland" type="button">返回小岛</button>
+          <button class="btn" id="btnCallNpc" type="button" disabled>叫小海来验收</button>
+          <button class="btn warn" id="btnLeaveDay" type="button">离开房间（一天后）</button>
+        </div>
+      </section>
+
+      <!-- Warehouse dock when in room -->
+      <aside class="warehouse hidden" id="warehouse">
+        <h3>仓库</h3>
+        <div class="warehouse-list" id="warehouseList"></div>
+      </aside>
+
+      <!-- Quest card -->
+      <aside class="quest-card" id="questCard">
+        <div class="quest-head">
+          <strong>委托</strong>
+          <span id="questStatus">未接取</span>
+        </div>
+        <p id="questTitle">—</p>
+        <ul>
+          <li>制作海洋风装饰 <b id="makeProgress">0/3</b></li>
+          <li>布置到小海房间 <b id="placeProgress">0/3</b></li>
+        </ul>
+        <button class="btn primary full hidden" id="btnGoRoom" type="button">前往布置</button>
+      </aside>
+
+      <!-- Annotation -->
+      <div class="annotation hidden" id="annotation"></div>
+    </main>
+
+    <!-- Dialog -->
+    <div class="modal-layer hidden" id="dialogLayer">
+      <div class="dialog" role="dialog" aria-modal="true">
+        <div class="dialog-npc"></div>
+        <div class="dialog-body">
+          <h2>小海</h2>
+          <p id="dialogText"></p>
+          <div class="dialog-actions" id="dialogActions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottle panel -->
+    <div class="modal-layer hidden" id="bottleLayer">
+      <div class="panel">
+        <header>
+          <h2>AI制作魔力瓶</h2>
+          <button class="icon-x" id="closeBottle" type="button" aria-label="关闭">×</button>
+        </header>
+        <p class="panel-lead">1 个魔力瓶 = 1 次<strong>确认采纳</strong>的 AI 制作。放弃或换一个不扣瓶。</p>
+        <div class="exchange">
+          <button class="ex-card" data-ex="shell" type="button">
+            <span>贝壳 ×3</span>
+            <span class="arrow">→</span>
+            <span>魔力瓶 ×1</span>
+          </button>
+          <button class="ex-card" data-ex="ore" type="button">
+            <span>矿石 ×2</span>
+            <span class="arrow">→</span>
+            <span>魔力瓶 ×1</span>
+          </button>
+          <button class="ex-card" data-ex="wood" type="button">
+            <span>木头 ×5</span>
+            <span class="arrow">→</span>
+            <span>魔力瓶 ×1</span>
+          </button>
+        </div>
+        <button class="btn full disabled" type="button" disabled>充值购买（长线 · Demo 未开放）</button>
+      </div>
+    </div>
+
+    <!-- Craft panel -->
+    <div class="modal-layer hidden" id="craftLayer">
+      <div class="panel wide">
+        <header>
+          <h2>AI制作</h2>
+          <button class="icon-x" id="closeCraft" type="button" aria-label="关闭">×</button>
+        </header>
+        <p class="panel-lead">确认采纳时消耗 1 魔力瓶 · 当前 <b id="craftBottleHint">2</b> 瓶</p>
+        <div class="craft-grid">
+          <label class="field">
+            <span>描述</span>
+            <textarea id="craftPrompt" rows="3"></textarea>
+          </label>
+          <div class="craft-side">
+            <button class="btn primary full" id="btnGenerate" type="button">开始生成</button>
+            <button class="btn full" id="btnQuick" type="button">按任务推荐生成</button>
+            <p class="tiny">第 2、3 件可用推荐加速；生成本身不扣瓶。</p>
+          </div>
+        </div>
+        <div class="gen-progress hidden" id="genProgress">
+          <div class="bar"><i id="genBar"></i></div>
+          <p id="genStep">理解描述…</p>
+        </div>
+        <div class="preview hidden" id="previewBox">
+          <div class="preview-visual" id="previewVisual"></div>
+          <div class="preview-controls">
+            <label>颜色 <input type="color" id="editColor" value="#3aa7ff" /></label>
+            <label>大小 <input type="range" id="editScale" min="80" max="130" value="100" /></label>
+            <label>亮度 <input type="range" id="editBright" min="60" max="140" value="100" /></label>
+            <div class="row">
+              <button class="btn" id="btnRegen" type="button">换一个</button>
+              <button class="btn ghost" id="btnAbort" type="button">放弃</button>
+              <button class="btn primary" id="btnConfirmCraft" type="button">确认采纳</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Place confirm -->
+    <div class="modal-layer hidden" id="placeLayer">
+      <div class="panel slim">
+        <h2>确认放置</h2>
+        <p id="placeText">把物品放在这里？</p>
+        <div class="row">
+          <button class="btn ghost" id="btnPlaceCancel" type="button">取消</button>
+          <button class="btn primary" id="btnPlaceOk" type="button">放在这里</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item menu -->
+    <div class="modal-layer hidden" id="itemMenuLayer">
+      <div class="panel slim">
+        <h2 id="itemMenuTitle">水母吊灯</h2>
+        <div class="stack">
+          <button class="btn primary full" id="btnEditPlaced" type="button">编辑</button>
+          <button class="btn full disabled" type="button" disabled>移动（本期演示编辑）</button>
+          <button class="btn full disabled" type="button" disabled>收回仓库（本期演示编辑）</button>
+          <button class="btn ghost full" id="closeItemMenu" type="button">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit placed -->
+    <div class="modal-layer hidden" id="editPlacedLayer">
+      <div class="panel">
+        <header>
+          <h2>继续编辑 · 水母吊灯</h2>
+          <button class="icon-x" id="closeEditPlaced" type="button">×</button>
+        </header>
+        <p class="panel-lead">未声明部分保持不动：挂点与主体轮廓不变，只改颜色与亮度。</p>
+        <div class="preview-visual lamp" id="editPlacedVisual"></div>
+        <div class="preview-controls">
+          <label>颜色 <input type="color" id="placedColor" value="#3aa7ff" /></label>
+          <label>亮度 <input type="range" id="placedBright" min="60" max="140" value="100" /></label>
+          <div class="row">
+            <button class="btn ghost" id="btnCancelPlacedEdit" type="button">取消</button>
+            <button class="btn primary" id="btnSavePlacedEdit" type="button">保存编辑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day transition -->
+    <div class="day-veil hidden" id="dayVeil">
+      <p id="dayText">一天后…</p>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast"></div>
+
+    <!-- End card -->
+    <div class="modal-layer hidden" id="endLayer">
+      <div class="panel center">
+        <h2>《我的AI小岛》Demo 演示完毕</h2>
+        <p>本 Demo 用模拟生成表现交互流程；真实模型能力核验见评测方案。</p>
+        <p class="tiny">命门已演示：确认写入 · 隔天回访一致 · 连续编辑后再一致</p>
+        <button class="btn primary" id="btnRestart" type="button">再看一遍（重置）</button>
+      </div>
+    </div>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
